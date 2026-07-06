@@ -1,0 +1,712 @@
+/* ==========================================================================
+   VRAM TETRIS STYLE SHEET
+   ========================================================================== */
+
+:root {
+    --bg-dark: #030307;
+    --bg-panel: rgba(10, 10, 20, 0.7);
+    --border-color: rgba(0, 240, 255, 0.15);
+    --cyan: #00f0ff;
+    --magenta: #ff007f;
+    --green: #39ff14;
+    --yellow: #ffff00;
+    --red: #ff3333;
+    --orange: #ff9900;
+    --purple: #bf00ff;
+    --text-primary: #e2e8f0;
+    --text-muted: #64748b;
+    --neon-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    --neon-shadow-magenta: 0 0 15px rgba(255, 0, 127, 0.4);
+    --neon-shadow-red: 0 0 15px rgba(255, 51, 51, 0.4);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Background effects */
+.background-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.grid-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(18, 18, 30, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18, 18, 30, 0.2) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.scanlines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+    z-index: 10;
+}
+
+.glow-radial {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle,
+        rgba(0, 240, 255, 0.05) 0%,
+        transparent 70%
+    );
+}
+
+/* Container Structure */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    animation: pulse 1.5s infinite;
+}
+
+h1 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.system-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.system-status .label {
+    color: var(--text-muted);
+}
+
+.system-status .status-val.green {
+    color: var(--green);
+    text-shadow: 0 0 5px var(--green);
+}
+
+/* MAIN LAYOUT */
+.main-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr 240px;
+    gap: 15px;
+    flex-grow: 1;
+    min-height: 0; /* Important for scroll sizing */
+}
+
+/* PANELS */
+.panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+    box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05);
+}
+
+.panel-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+.panel-header h2 {
+    font-size: 0.85rem;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.stat-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.stat-value.cyan {
+    color: var(--cyan);
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
+.stat-value.green {
+    color: var(--green);
+    text-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+}
+
+.stat-value.warning-text {
+    color: var(--orange);
+    text-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
+}
+
+.subtext {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    margin-top: -2px;
+}
+
+/* Progress bar styles */
+.progress-bar-container {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    transition: width 0.3s ease;
+}
+
+.progress-bar-container.warning .progress-bar {
+    background: var(--orange);
+    box-shadow: 0 0 10px var(--orange);
+}
+
+/* MODE SELECTOR */
+.mode-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 8px;
+}
+
+.mode-selector h3 {
+    font-size: 0.75rem;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.mode-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.mode-btn {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    color: var(--text-muted);
+    padding: 6px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-btn:hover {
+    color: var(--text-primary);
+    border-color: rgba(0, 240, 255, 0.6);
+}
+
+.mode-btn.active {
+    background: rgba(0, 240, 255, 0.1);
+    color: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: var(--neon-shadow);
+}
+
+.mode-desc {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+    min-height: 48px;
+}
+
+/* CENTER PANEL: GAME CANVAS */
+.center-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.canvas-container {
+    position: relative;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: rgba(5, 5, 10, 0.95);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+    overflow: hidden;
+}
+
+#game-canvas {
+    display: block;
+}
+
+/* OVERLAYS */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 2, 6, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay-content {
+    text-align: center;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    max-width: 200px; /* matched to canvas width */
+}
+
+.alert-icon {
+    font-size: 1.8rem;
+    animation: flash 1s infinite alternate;
+}
+
+.alert-title {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--red);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+    margin-bottom: -2px;
+}
+
+.alert-subtitle {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.alert-desc {
+    font-size: 0.72rem;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.crash-dump {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 51, 51, 0.2);
+    border-radius: 4px;
+    padding: 6px;
+    width: 100%;
+    text-align: left;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: #ff9999;
+    max-height: 90px;
+    overflow-y: auto;
+}
+
+/* Custom Red scrollbars for CUDA OOM crash-dump */
+.crash-dump::-webkit-scrollbar {
+    width: 4px;
+}
+
+.crash-dump::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+}
+
+.crash-dump::-webkit-scrollbar-thumb {
+    background: rgba(255, 51, 51, 0.25);
+    border-radius: 2px;
+}
+
+.crash-dump::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 51, 51, 0.5);
+}
+
+.crash-dump span {
+    display: block;
+    line-height: 1.25;
+}
+
+.btn-retry {
+    background: var(--cyan);
+    border: none;
+    color: var(--bg-dark);
+    padding: 8px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 800;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: var(--neon-shadow);
+    transition: all 0.2s ease;
+    margin-top: 5px;
+}
+
+.btn-retry:hover {
+    transform: scale(1.05);
+    background: #ffffff;
+    box-shadow: 0 0 20px #ffffff;
+}
+
+/* Victory Overlay styling */
+.overlay-content.victory {
+    max-width: 200px;
+}
+
+.overlay-content.victory .alert-title {
+    color: var(--green);
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+}
+
+.victory-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.v-stat {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 6px;
+}
+
+.v-stat span {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+
+.v-stat h3 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.1rem;
+    margin-top: 2px;
+}
+
+/* RIGHT PANEL */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.hud-box {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.hud-box .label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.hud-value {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.hud-sub-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 240, 255, 0.05);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.hud-sub-box h3 {
+    font-size: 0.75rem;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.preview-box {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+}
+
+.preview-box canvas {
+    display: block;
+}
+
+/* SPECIAL ABILITY */
+.ability-card {
+    background: rgba(255, 0, 127, 0.05);
+    border: 1px solid rgba(255, 0, 127, 0.2);
+    border-radius: 6px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.ability-card.charged {
+    background: rgba(255, 0, 127, 0.1);
+    border-color: var(--magenta);
+    box-shadow: var(--neon-shadow-magenta);
+}
+
+.ability-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ability-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--magenta);
+    letter-spacing: 1px;
+}
+
+.ability-key {
+    font-family: 'Share Tech Mono', monospace;
+    background: rgba(255, 0, 127, 0.2);
+    color: var(--magenta);
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.ability-meter {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ability-fill {
+    height: 100%;
+    background: var(--magenta);
+    box-shadow: 0 0 10px var(--magenta);
+    transition: width 0.1s linear;
+}
+
+/* CONSOLE BOX (SIDEBAR WIDGET) */
+.console-box {
+    height: 160px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: rgba(2, 2, 5, 0.85);
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.02);
+    overflow: hidden;
+}
+
+.console-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 4px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 240, 255, 0.03);
+}
+
+.console-header h3 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cyan);
+    letter-spacing: 1px;
+}
+
+.blinking-cursor {
+    color: var(--cyan);
+    font-weight: 800;
+    animation: cursor-blink 1s steps(2, start) infinite;
+}
+
+.console-body {
+    padding: 6px 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: #a5b4fc;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Custom Dark scrollbars for console logs */
+.console-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.console-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+}
+
+.console-body::-webkit-scrollbar-thumb {
+    background: rgba(0, 240, 255, 0.15);
+    border-radius: 2px;
+}
+
+.console-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 240, 255, 0.4);
+}
+
+.console-log-line {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    padding-bottom: 4px;
+}
+
+.log-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 0.65rem;
+}
+
+.console-log-line .timestamp {
+    color: var(--text-muted);
+}
+
+.console-log-line .log-tag {
+    font-weight: 600;
+}
+
+.console-log-line .log-tag.info {
+    color: var(--cyan);
+}
+
+.console-log-line .log-tag.warning {
+    color: var(--orange);
+}
+
+.console-log-line .log-tag.error {
+    color: var(--red);
+}
+
+.console-log-line .log-text {
+    word-break: break-all;
+    line-height: 1.3;
+    padding-left: 2px;
+}
+
+/* ANIMATIONS */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+@keyframes cursor-blink {
+    to { visibility: hidden; }
+}
+
+@keyframes flash {
+    0% { opacity: 0.3; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1.05); }
+}
